@@ -1,4 +1,4 @@
-# autoautelion
+# [autoautelion](http://autoautelion.herokuapp.com/)
 
 Automated reporting of revenue and royalty fee for [Autelion](https://helion.pl/autelion/)-registered authors.
 
