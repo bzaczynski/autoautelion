@@ -44,6 +44,9 @@ def index():
         model['last_updated_at'] = datetime.datetime.strptime(
             model['last_updated_at'], '%Y-%m-%dT%H:%M:%S.%f')
         return flask.render_template('index.html.j2', model=model)
+    except TypeError as ex:
+        logger.error('Unable to decode JSON from Redis due to: %s', ex)
+        return flask.Response('No data available', mimetype='text/plain')
     except json.JSONDecodeError as ex:
         logger.error('Unable to decode JSON from Redis due to: %s', ex)
         return flask.Response('There was an error', mimetype='text/plain')
