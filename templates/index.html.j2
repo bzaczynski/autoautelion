@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Autoautelion</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,700" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Lora', serif;
+        }
+        body {
+            background-color: #eee;
+        }
+        .report {
+            border-collapse: collapse;
+        }
+        .report td, th {
+            border: 1px solid #aaa;
+            padding: 10px;
+        }
+        .report td {
+            text-align: right;
+            background-color: #fff;
+        }
+        .report th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            background-color: #777;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <p>Last updated on <b>{{ model.last_updated_at.strftime('%A, %d %B %Y @ %H:%S UTC') }}</b></p>
+    <hr>
+    {% for book in model.books.values() %}
+        <h2>🔖 {{ book.title }}</h2>
+        <table class="report">
+            <tr>
+                <th>Copies Sold</th>
+                <th>Revenue</th>
+                <th>Total Royalty</th>
+                <th>Paid Royalty</th>
+                <th>Current Royalty</th>
+            </tr>
+            <tr>
+                <td>{{ book.copies_sold }}</td>
+                <td>{{ '{:,.2f} zł'.format(book.revenue) }}</td>
+                <td>{{ '{:,.2f} zł'.format(book.royalty.total) }}</td>
+                <td>{{ '{:,.2f} zł'.format(book.royalty.paid) }}</td>
+                <td><b>{{ '{:,.2f} zł'.format(book.royalty.current) }}</b></td>
+            </tr>
+        </table>
+    {% endfor %}
+    <hr>
+    <h2>💰 Payments</h2>
+    <table class="report">
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+        </tr>
+        {% for date, amount in model.payments.items() %}
+        <tr>
+            <td>{{ date }}</td>
+            <td>{{ '{:,.2f} zł'.format(amount) }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
