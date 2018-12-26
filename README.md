@@ -2,14 +2,16 @@
 
 Automated reporting of revenue and royalty fee for [Autelion](https://helion.pl/autelion/)-registered authors.
 
-## Usage
+## Features
 
-TODO
+The following tool automates reporting by:
 
-These require authentication with configured credentials:
-
-* Website: <http://autoautelion.herokuapp.com/>
-* JSON API: <http://autoautelion.herokuapp.com/api>
+* periodically web scraping Autelion (legacy CGI with invalid HTML)
+* caching status in Redis for quick responses
+* sending email notifications on status changes
+* providing web based view at <http://autoautelion.herokuapp.com/>
+* providing JSON API endpoint at <http://autoautelion.herokuapp.com/api>
+* securing both endpoints with HTTP Basic Authentication
 
 ## Development
 
@@ -112,6 +114,7 @@ Install add-ons. Note this requires account verification by providing your credi
 $ heroku addons:create heroku-redis:hobby-dev -a autoautelion
 $ heroku addons:create scheduler:standard
 $ heroku addons:create sendgrid:starter
+$ heroku addons:create papertrail
 ```
 
 This will take a while, so you may want to check the creation status:
@@ -191,9 +194,9 @@ $ heroku rollback
 $ heroku rollback v123
 ```
 
-### Testing
+### Testing and Debugging
 
-To test locally:
+To run locally:
 
 ```shell
 $ heroku local
@@ -211,6 +214,12 @@ If something goes wrong, take a look at the logs:
 $ heroku logs --tail
 ```
 
+Search through the logs persisted in Papertrail add-on:
+
+```shell
+$ heroku addons:open papertrail
+```
+
 List dynos for the app:
 
 ```shell
@@ -221,4 +230,10 @@ Run a one-off dyno (temporary container) with `/bin/bash` to debug:
 
 ```shell
 $ heroku run bash
+```
+
+Log in to Redis:
+
+```shell
+$ heroku redis:cli --confirm autoautelion
 ```
