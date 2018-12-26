@@ -21,17 +21,11 @@ Clone the repository from GitHub:
 $ git clone git@github.com:bzaczynski/autoautelion.git
 ```
 
-Make and activate virtual environment:
+Install requirements in a virtual environment:
 
 ```shell
 $ cd autoautelion
-$ mkvirtualenv autoautelion
-```
-
-Install requirements:
-
-```shell
-$ pip install -r requirements.txt
+$ pipenv install --dev
 ```
 
 Install local redis server:
