@@ -41,27 +41,29 @@ $ sudo apt install redis-server
 Export environment variables:
 
 ```shell
-$ export REDIS_URL=redis://localhost
 $ export AUTELION_USERNAME=<your-username>
 $ export AUTELION_PASSWORD=<your-password>
+$ export REDIS_URL=redis://localhost
+$ export EMAIL_ADDRESS=<your-email>
+$ export SENDGRID_API_KEY=<your-api-key>
 ```
 
-Run parser job locally:
+Run updater job locally:
 
 ```shell
-$ python parserjob.py
+$ python updaterjob.py
 ```
 
 Run web server locally:
 
 ```shell
-$ flask run
+$ FLASK_APP=webapp.py flask run
 ```
 
 ...alternatively:
 
 ```shell
-$ gunicorn app:app
+$ gunicorn webapp:app
 ```
 
 ## Cloud Provisioning
@@ -118,13 +120,13 @@ This will take a while, so you may want to check the creation status:
 $ heroku addons
 ```
 
-Schedule a background job to run hourly:
+Schedule a background job to run daily:
 
 ```shell
 $ heroku addons:open scheduler
 ```
 
-...then enter `python parserjob.py` as the command.
+...then enter `python updaterjob.py` as the command.
 
 Grab SendGrid auto-generated username and password:
 
@@ -149,8 +151,11 @@ $ heroku ps:scale web=1
 To set or update remote configuration on Heroku:
 
 ```shell
-$ heroku config:set AUTELION_USERNAME=<your-username> AUTELION_PASSWORD=<your-password> EMAIL_ADDRESS=<your-email>
+$ heroku config:set AUTELION_USERNAME=<your-username> AUTELION_PASSWORD=<your-password>
+$ heroku config:set SENDGRID_API_KEY=<your-api-key> EMAIL_ADDRESS=<your-email>
 ```
+
+Note that `REDIS_URL` variable is configured automatically.
 
 Confirm remote configuration validity. This will also display other environment variables, e.g. for add-ons:
 

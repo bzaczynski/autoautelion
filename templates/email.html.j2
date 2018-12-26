@@ -1,16 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Autoautelion</title>
+    <title>Autelion Report</title>
     <meta charset="UTF-8">
-    <link href="https://fonts.googleapis.com/css?family=Lora:400,700" rel="stylesheet">
     <style>
-        * {
-            font-family: 'Lora', serif;
-        }
-        body {
-            background-color: #eee;
-        }
         .report {
             border-collapse: collapse;
         }
@@ -31,12 +24,11 @@
     </style>
 </head>
 <body>
-    {% if model.updated_at != None %}
-    <p>Last updated on <b>{{ model.updated_at.strftime('%A, %d %B %Y @ %H:%M UTC') }}</b></p>
+    <p>Most recent status always available <a href="http://autoautelion.herokuapp.com/">on-line</a>.</p>
+    {% if updated_at != None %}
+    <p>The following report contains data generated on {{ updated_at.strftime('%A, %d %B %Y @ %H:%M UTC') }}</p>
     {% endif %}
-    <p><a href="/api">Show original JSON</a></p>
-    <hr>
-    {% for book in model.books.values() %}
+    {% for book in books.values() %}
         <h2>🔖 {{ book.title }}</h2>
         <table class="report">
             <tr>
@@ -62,7 +54,7 @@
             <th>Date</th>
             <th>Amount</th>
         </tr>
-        {% for date, amount in model.payments.items() %}
+        {% for date, amount in payments.items() %}
         <tr>
             <td>{{ date }}</td>
             <td>{{ '{:,.2f} zł'.format(amount) }}</td>
