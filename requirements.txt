@@ -4,3 +4,4 @@ gunicorn==19.9.0
 lxml==4.2.5
 redis==3.0.1
 requests==2.21.0
+sendgrid==5.6.0

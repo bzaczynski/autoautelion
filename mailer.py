@@ -1,36 +1,43 @@
-#!/usr/bin/env python
-
-"""
-Scheduled job to send emails with Autelion reports.
-"""
-
 import os
 import logging
 
-import redis
+import sendgrid
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def main():
-    """Job entry point."""
+api_key = os.environ.get('SENDGRID_API_KEY')
+email = os.environ.get('EMAIL_ADDRESS')
 
-    logger.info('Started mailer job')
-
-    redis_url = os.environ.get('REDIS_URL')
-
-    if redis_url is None:
-        logger.error('Unable to read REDIS_URL environment variable')
-    else:
-        connection = redis.from_url(redis_url)
-        model = connection.get('autelion')
-
-
-if __name__ == '__main__':
-    try:
-        main()
-    except Exception as ex:
-        logger.error('There was an error: %s', ex)
-    finally:
-        logger.info('Finished mailer job')
+if api_key is None:
+    logger.error('Unable to read SENDGRID_API_KEY environment variable')
+elif email is None:
+    logger.error('Unable to read EMAIL_ADDRESS environment variable')
+else:
+    mail_client = sendgrid.SendGridAPIClient(api_key=api_key)
+    response = mail_client.client.mail.send.post(request_body={
+        'personalizations': [
+            {
+                'to': [
+                    {
+                        'email': email
+                    }
+                ],
+                'subject': 'Autelion Report'
+            }
+        ],
+        'from': {
+            'email': 'Autoautelion <autoautelion@herokuapp.com>'
+        },
+        'content': [
+            {
+                'type': 'text/html',
+                'value': 'Hello, <b>Email</b>!'
+            }
+        ]
+    })
+    print(response.status_code)
+    print(response.body)
+    print(response.headers)

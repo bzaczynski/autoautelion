@@ -109,7 +109,7 @@ Install add-ons. Note this requires account verification by providing your credi
 ```shell
 $ heroku addons:create heroku-redis:hobby-dev -a autoautelion
 $ heroku addons:create scheduler:standard
-$ heroku addons:create mailgun:starter
+$ heroku addons:create sendgrid:starter
 ```
 
 This will take a while, so you may want to check the creation status:
@@ -118,13 +118,25 @@ This will take a while, so you may want to check the creation status:
 $ heroku addons
 ```
 
-Schedule a background job to run daily:
+Schedule a background job to run hourly:
 
 ```shell
 $ heroku addons:open scheduler
 ```
 
 ...then enter `python parserjob.py` as the command.
+
+Grab SendGrid auto-generated username and password:
+
+```shell
+$ heroku config | grep SENDGRID
+```
+
+Navigate your browser to <https://app.sendgrid.com/settings/api_keys> and log in using the obtained credentials. Click the `Create API Key` button, choose full access key and then provide key name e.g. `autoautelion`. Copy the key and define a Heroku environment variable. Note that SendGrid will not show the key again!
+
+```shell
+$ heroku config:set SENDGRID_API_KEY=<your-api-key>
+```
 
 Scale the web process:
 
@@ -137,7 +149,7 @@ $ heroku ps:scale web=1
 To set or update remote configuration on Heroku:
 
 ```shell
-$ heroku config:set AUTELION_USERNAME=<your-username> AUTELION_PASSWORD=<your-password>
+$ heroku config:set AUTELION_USERNAME=<your-username> AUTELION_PASSWORD=<your-password> EMAIL_ADDRESS=<your-email>
 ```
 
 Confirm remote configuration validity. This will also display other environment variables, e.g. for add-ons:
