@@ -73,7 +73,7 @@ $ gunicorn webapp:app
 Install Heroku command-line client:
 
 ```shell
-$ sudo snap install heroku
+$ sudo snap install heroku --classic
 ```
 
 Log in to your Heroku account, either via web browser:
