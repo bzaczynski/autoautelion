@@ -103,7 +103,7 @@ class Autelion:
                 }
 
         # past payments
-        logger.info('Getting paymens info')
+        logger.info('Getting payments info')
         response = self.session.get(url('historia.cgi'))
         if response.ok:
             html = bs4.BeautifulSoup(response.text, features='lxml')
