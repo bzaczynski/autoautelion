@@ -94,13 +94,16 @@ class Autelion:
             html = bs4.BeautifulSoup(response.text, features='lxml')
             for row in html.select('#autelion tr.ukryta'):
                 id_ = row.select('td:nth-of-type(1) a')[0].text
-                books[id_]['copies_sold'] = int(row.select('td')[3].text)
-                books[id_]['revenue'] = number(row.select('td')[4].text)
-                books[id_]['royalty'] = {
-                    'total': number(row.select('td')[5].text),
-                    'paid': number(row.select('td')[6].text),
-                    'current': number(row.select('td')[7].text)
-                }
+                if id_ in books:
+                    books[id_]['copies_sold'] = int(row.select('td')[3].text)
+                    books[id_]['revenue'] = number(row.select('td')[4].text)
+                    books[id_]['royalty'] = {
+                        'total': number(row.select('td')[5].text),
+                        'paid': number(row.select('td')[6].text),
+                        'current': number(row.select('td')[7].text)
+                    }
+                else:
+                    logger.warn('Book with ID=%s not found', id_)
 
         # past payments
         logger.info('Getting payments info')
